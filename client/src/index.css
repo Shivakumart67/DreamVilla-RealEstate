@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background-color: rgb(250, 248, 255)
+}
+
+.hamburger div{
+    background-color: rgb(79, 77, 77);
+    width: 30px;
+    height: 3px
+}
+.hamburger{
+    cursor: pointer;
+    padding: 2px;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    z-index: 99;
+}
+.hamburger:hover{
+    opacity: 0.8;
+}
+
+.mobile-menu{
+    position: absolute;
+    width: 50%;
+    top: 75px;
+    right: 0;
+    bottom: 0px;
+    background-color: #cdcdcd;
+    border-end-start-radius: 25px;
+    border-start-start-radius: 25px;
+}
+.mobile-menu.show-animation {
+    animation: scroll 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+.mobile-menu.hide-animation {
+    animation: hidescroll 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes scroll {
+    0%{
+        width: 0%;
+    }
+    100%{
+        width: 50%
+    }
+}
+
+@keyframes hidescroll {
+    0%{
+        width: 50%;
+    }
+    100%{
+        width: 0%;
+        display: block
+        
+    }
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
