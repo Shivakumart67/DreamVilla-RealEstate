@@ -1,17 +1,18 @@
-import express from 'express';
-import mongoose from 'mongoose'
+import express from 'express'
+import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 dotenv.config()
-const app = express();
 
 mongoose.connect(process.env.MONGO)
 .then(()=>{
-    console.log("Connected to Mongoose");
+    console.log('Database is Connected')
 })
 .catch((err)=>{
     console.log(err)
 })
+const app = express();
 
-app.listen(3000, ()=>{
-    console.log("Server is Running on PORT 3000")
+
+app.listen(4000, ()=>{
+    console.log('Backend is Connected with PORT: 4000')
 })
