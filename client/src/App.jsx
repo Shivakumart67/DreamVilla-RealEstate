@@ -6,6 +6,8 @@ import Signup from './Pages/Signup'
 import About from './Pages/About'
 import Profile from './Pages/Profile'
 import Header from './Components/Header'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path='/profile' element = {<Profile/>} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer position='bottom-left' autoClose='1500' />
+
     </div>
   )
 }
