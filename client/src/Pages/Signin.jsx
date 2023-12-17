@@ -1,17 +1,38 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { HOST } from "../apiPath.js";
+import { toast } from "react-toastify";
+import { RotatingLines } from "react-loader-spinner";
 
 function Signin() {
-    const [formData, setFormData] = useState({});
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
 
-    const handleInput = (e) => {
-      setFormData({...formData, [e.target.id]: e.target.value})
-    }
+  const handleInput = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
-    const handleSubmit = (e) => {
-      e.preventDefault();
-    }
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    await axios
+      .post(`/api/auth/signin`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(({ data }) => {
+        toast.success("Login Successfull");
+        setLoading(false);
+        navigate("/");
+      })
+      .catch(({ response }) => {
+        toast.error(response.data.message);
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -38,14 +59,26 @@ function Signin() {
           type="submit"
           className="bg-stone-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          Sign in
+          {loading ? (
+            <center>
+              <RotatingLines
+                strokeColor="gray "
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="20"
+                visible={true}
+              />
+            </center>
+          ) : (
+            <>Sign In</>
+          )}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
         <p>Create an Account?</p>
-        <Link to = '/signup'>
-        <span className="text-blue-700 hover:cursor-pointer mt">Sign up</span>
-        </Link> 
+        <Link to="/signup">
+          <span className="text-blue-700 hover:cursor-pointer mt">Sign up</span>
+        </Link>
       </div>
     </div>
   );

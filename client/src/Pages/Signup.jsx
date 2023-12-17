@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 function Signup() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -18,19 +18,19 @@ function Signup() {
     setLoading(true);
     try {
       const response = await axios
-        .post("http://localhost:4000/api/auth/signup", formData, {
+        .post("/api/auth/signup", formData, {
           headers: {
             "Content-Type": "application/json",
           },
         })
-        .then(()=>{
-          setLoading(false)
-          toast.success('User Created Successfully')
-          navigate('/signin')
+        .then(() => {
+          setLoading(false);
+          toast.success("User Created Successfully");
+          navigate("/signin");
         });
     } catch (error) {
       setLoading(false);
-      toast.error('Something Wents Wrong')
+      toast.error("Something Wents Wrong");
       console.error(error);
     }
   };
@@ -64,13 +64,11 @@ function Signup() {
         />
         <button
           type="submit"
-          disabled = {loading}
+          disabled={loading}
           className="bg-stone-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {
-            loading ? (
-              <center>
-
+          {loading ? (
+            <center>
               <RotatingLines
                 strokeColor="gray "
                 strokeWidth="5"
@@ -78,10 +76,10 @@ function Signup() {
                 width="20"
                 visible={true}
               />
-              </center>
-            ) : <>Sign Up</>
-          }
-
+            </center>
+          ) : (
+            <>Sign Up</>
+          )}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
