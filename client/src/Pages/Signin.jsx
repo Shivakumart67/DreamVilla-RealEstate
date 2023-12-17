@@ -1,14 +1,20 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { HOST } from "../apiPath.js";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice";
 import { RotatingLines } from "react-loader-spinner";
 
 function Signin() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { loading } = useSelector((state) => state.user);
 
   const handleInput = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -16,7 +22,7 @@ function Signin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    dispatch(signInStart());
     await axios
       .post(`/api/auth/signin`, formData, {
         headers: {
@@ -25,12 +31,12 @@ function Signin() {
       })
       .then(({ data }) => {
         toast.success("Login Successfull");
-        setLoading(false);
+        dispatch(signInSuccess(data));
         navigate("/");
       })
       .catch(({ response }) => {
         toast.error(response.data.message);
-        setLoading(false);
+        dispatch(signInFailure(response.data.message));
       });
   };
 
