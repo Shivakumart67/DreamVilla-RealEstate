@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { toast } from "react-toastify";
+import OAuth from "../OAuth/OAuth";
 
 function Signup() {
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ function Signup() {
             <>Sign Up</>
           )}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Have an account?</p>

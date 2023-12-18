@@ -9,6 +9,7 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import { RotatingLines } from "react-loader-spinner";
+import OAuth from "../OAuth/OAuth";
 
 function Signin() {
   const navigate = useNavigate();
@@ -79,6 +80,7 @@ function Signin() {
             <>Sign In</>
           )}
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-5">
         <p>Create an Account?</p>
