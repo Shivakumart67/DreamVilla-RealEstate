@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import Logo from "../assets/images/Logo.png";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function Header() {
+  const { currentUser } = useSelector((state) => state.user);
   const [menu, setMenu] = useState(false);
   return (
     <header className="flex justify-between bg-stone-100 shadow-md p-3 items-center mx-auto">
@@ -39,11 +41,23 @@ function Header() {
         />
         <FaSearch className="text-stone-600 hover:cursor-pointer" />
       </form>
-      <Link to="signup">
-        <div className="text-stone-700 hidden sm:block mr-6 font-bold hover:underline cursor-pointer hover:text-stone-800">
-          Sign Up
-        </div>
-      </Link>
+
+      {currentUser ? (
+        <Link to="/profile">
+          <img
+            className="rounded-full w-10 h-10 object-cover"
+            src={currentUser.avatar}
+            alt={currentUser.username}
+          />
+        </Link>
+      ) : (
+        <Link to="/signin">
+          <div className="text-stone-700 hidden sm:block mr-6 font-bold hover:underline cursor-pointer hover:text-stone-800">
+            Sign In
+          </div>
+        </Link>
+      )}
+
       <div
         className="sm:hidden hamburger"
         onClick={() => {
@@ -63,33 +77,40 @@ function Header() {
             : "mobile-menu hide-animation sm:hidden"
         }
       >
-        {
-          menu ? (
-            <ul className="flex flex-col gap-5 items-center mt-6">
-          <Link to="/">
-            <li className="text-stone-700 font-bold cursor-pointer hover:text-stone-800" onClick={()=>setMenu(false)}>
-              Home
-            </li>
-          </Link>
-          <Link to="about">
-            <li className="text-stone-700 font-bold cursor-pointer hover:text-stone-800" onClick={()=>setMenu(false)}>
-              About
-            </li>
-          </Link>
-          <Link to="signup">
-          <div className="text-stone-700 font-bold cursor-pointer hover:text-stone-800" onClick={()=>setMenu(false)}>
-            Sign Up
-          </div>
-        </Link>
+        {menu ? (
+          <ul className="flex flex-col gap-5 items-center mt-6">
+            <Link to="/">
+              <li
+                className="text-stone-700 font-bold cursor-pointer hover:text-stone-800"
+                onClick={() => setMenu(false)}
+              >
+                Home
+              </li>
+            </Link>
+            <Link to="about">
+              <li
+                className="text-stone-700 font-bold cursor-pointer hover:text-stone-800"
+                onClick={() => setMenu(false)}
+              >
+                About
+              </li>
+            </Link>
+            <Link to="signup">
+              <div
+                className="text-stone-700 font-bold cursor-pointer hover:text-stone-800"
+                onClick={() => setMenu(false)}
+              >
+                Sign Up
+              </div>
+            </Link>
 
-          {/* <Link to='profile'>
+            {/* <Link to='profile'>
         <li>
           Profile
         </li>
         </Link> */}
-        </ul>
-           ) : null
-        }
+          </ul>
+        ) : null}
       </div>
     </header>
   );

@@ -48,9 +48,7 @@ export const googleSignIn = async (req, res, next) => {
                 .json(rest)
         } else {
             const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
-            const now = new Date(), [d, m, y] = [now.getDate(), now.getMonth() + 1, now.getFullYear().toString().slice(-2)], [h, min] = [now.getHours(), now.getMinutes()].map(n => (n < 10 ? '0' : '') + n);
-            const formattedDateTime = `${d}${m}${y}${h}${min}`;
-            const updatedUserName = username.split(' ').join('').toLowerCase() + formattedDateTime
+            const updatedUserName = email.split('@')[0]
             const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
             const newUser = new User({ username: updatedUserName, email, password: hashedPassword, avatar: photo })
             await newUser.save();

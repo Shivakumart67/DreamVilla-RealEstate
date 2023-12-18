@@ -9,7 +9,7 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import { RotatingLines } from "react-loader-spinner";
-import OAuth from "../OAuth/OAuth";
+import OAuth from "../Components/OAuth";
 
 function Signin() {
   const navigate = useNavigate();

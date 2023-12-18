@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { RotatingLines } from "react-loader-spinner";
 import { toast } from "react-toastify";
-import OAuth from "../OAuth/OAuth";
+import OAuth from "../Components/OAuth";
 
 function Signup() {
   const navigate = useNavigate();
