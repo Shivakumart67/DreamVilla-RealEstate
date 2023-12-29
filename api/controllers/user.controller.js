@@ -7,7 +7,7 @@ export const test = (req, res) => {
 }
 
 export const updateProfile = async (req, res, next) => {
-    if (req.user.id !== req.params.id) return next(errorHandler(201, "Your not the use please login"))
+    if (req.user.id !== req.params.id) return next(errorHandler(400, "Your not the user please login"))
     try {
 
         if (req.body.password) {

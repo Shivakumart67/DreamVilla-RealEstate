@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRef } from "react";
 import {
   getDownloadURL,
@@ -8,9 +8,18 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import axios from "axios";
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from "../redux/user/userSlice";
+import { RotatingLines } from "react-loader-spinner";
+import { toast } from "react-toastify";
 
 function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { currentUser, loading, error } = useSelector((state) => state.user);
   const [fileError, setFileError] = useState(false);
   const [formData, setFormData] = useState({});
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -42,9 +51,28 @@ function Profile() {
     }
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("sdlj");
+
+    dispatch(updateUserStart());
+    const res = axios
+      .post(`/api/user/update/${currentUser._id}`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(({ data }) => {
+        dispatch(updateUserSuccess(data));
+        toast.success("Profile Updated Successfully");
+      })
+      .catch(({ response }) => {
+        dispatch(updateUserFailure(response.data.message));
+        toast.error(response.data.message);
+      });
   };
   return (
     <div className="p-5 max-w-lg mx-auto">
@@ -83,24 +111,42 @@ function Profile() {
           type="text"
           id="username"
           placeholder="username"
+          defaultValue={currentUser.username}
+          onChange={handleChange}
         />
         <input
           className="p-2 border  rounded-lg outline-none"
           type="email"
           placeholder="email"
           id="email"
+          defaultValue={currentUser.email}
+          onChange={handleChange}
         />
         <input
           className="p-2 border  rounded-lg outline-none"
           type="password"
           placeholder="password"
           id="password"
+          onChange={handleChange}
         />
         <button
           type="submit"
+          disabled={loading}
           className="bg-green-600 p-2 rounded-lg text-white uppercase hover:opacity-90 disabled:opacity-70"
         >
-          Update
+          {loading ? (
+            <center>
+              <RotatingLines
+                strokeColor="white"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="20"
+                visible={true}
+              />
+            </center>
+          ) : (
+            <>Update</>
+          )}
         </button>
       </form>
       <div className="flex justify-between my-3">
