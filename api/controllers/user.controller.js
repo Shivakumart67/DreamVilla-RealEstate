@@ -28,4 +28,16 @@ export const updateProfile = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}   
+}
+
+export const deleteUser = async (req, res, next) => {
+    if (req.user.id !== req.params.id) return next(errorHandler(400, "User is no valid"))
+    try {
+        const data = await User.findByIdAndDelete(req.params.id)
+        res.clearCookie('access_token');
+        res.status(200).json('User Deleted Sucessfully')
+    } catch (error) {
+        next(error)
+    }
+
+}

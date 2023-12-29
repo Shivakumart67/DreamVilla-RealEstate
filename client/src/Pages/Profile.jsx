@@ -10,6 +10,9 @@ import {
 import { app } from "../firebase";
 import axios from "axios";
 import {
+  deleteUserFailure,
+  deleteUserStart,
+  deleteUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -19,7 +22,7 @@ import { toast } from "react-toastify";
 
 function Profile() {
   const dispatch = useDispatch();
-  const { currentUser, loading, error } = useSelector((state) => state.user);
+  const { currentUser, loading } = useSelector((state) => state.user);
   const [fileError, setFileError] = useState(false);
   const [formData, setFormData] = useState({});
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -74,6 +77,33 @@ function Profile() {
         toast.error(response.data.message);
       });
   };
+
+  const deleteUser = () => {
+    dispatch(deleteUserStart());
+    axios
+      .delete(`/api/user/delete/${currentUser._id}`)
+      .then(() => {
+        dispatch(deleteUserSuccess());
+      })
+      .catch(({ response }) => {
+        dispatch(deleteUserFailure(response.data.message));
+        toast.error(response.data.message);
+      });
+  };
+
+  const userSignOut = async () => {
+    await axios
+      .get("/api/auth/signout")
+      .then(() => {
+        toast.success("User Logged Out Successfully");
+        dispatch(deleteUserSuccess());
+      })
+      .catch(({ response }) => {
+        toast.error(response.data.message);
+        dispatch(deleteUserFailure(response.data.message));
+      });
+  };
+
   return (
     <div className="p-5 max-w-lg mx-auto">
       <h4 className="text-3xl font-semibold text-center my-1">Profile</h4>
@@ -150,10 +180,16 @@ function Profile() {
         </button>
       </form>
       <div className="flex justify-between my-3">
-        <span className="text-red-600 font-semibold cursor-pointer hover:opacity-90">
+        <span
+          onClick={deleteUser}
+          className="text-red-600 font-semibold cursor-pointer hover:opacity-90"
+        >
           Delete Account
         </span>
-        <span className="text-red-600 font-semibold cursor-pointer hover:opacity-90">
+        <span
+          onClick={userSignOut}
+          className="text-red-600 font-semibold cursor-pointer hover:opacity-90"
+        >
           SignOut
         </span>
       </div>
